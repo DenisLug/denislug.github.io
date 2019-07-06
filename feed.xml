@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.7.4">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2019-07-06T09:40:16+02:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">ResetGoToMain</title><subtitle>Ein Blog der sich mit Themen wie Linux, Programmierung, Webentwicklung und dem Protokoll QUIC beschäftigt. Auch andere Freizeitthemen finden hier Platz.</subtitle><entry><title type="html">Control Kodi with Tasker and Amazfit BIP</title><link href="http://localhost:4000/control-kodi-with-tasker-and-amazfit-bip/" rel="alternate" type="text/html" title="Control Kodi with Tasker and Amazfit BIP" /><published>2019-05-10T00:00:00+02:00</published><updated>2019-05-10T00:00:00+02:00</updated><id>http://localhost:4000/control-kodi-with-tasker-and-amazfit-bip</id><content type="html" xml:base="http://localhost:4000/control-kodi-with-tasker-and-amazfit-bip/">&lt;p&gt;A couple weeks ago I have purchased the Xiaomi Amazfit BIP smartwatch. It is a very cheap (50$) and simple watch with a GPS sensor, heart rate monitoring, sleep tracking, step counter and an enormous battery life of multiple weeks!
+The long battery life is possible through the always-on display which seems to be based on an e-ink display of ebook readers like the Amazon Kindle. In contrast to the ebook readers this display also shows a low range of colors.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/Amazfit_BIP.jpg&quot; alt=&quot;Xiaomi Amazfit BIP&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;I thought it would be very convenient to pause and resume the Kodi playback on my Raspberry Pi. This can be realized with the Android app &lt;a href=&quot;https://play.google.com/store/apps/details?id=net.dinglisch.android.taskerm&amp;amp;hl=de&quot;&gt;Tasker&lt;/a&gt; and the &lt;a href=&quot;https://play.google.com/store/apps/details?id=cz.zdenekhorak.amazfittools&quot;&gt;Tools &amp;amp; Amazfit&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To get it work create on your phone a new Javascript file with this content:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;kd&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQ_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'http://IP_ADDRESS_OF_KODI:PORT/jsonrpc?request='&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Button count: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;button_count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ================ BUTTON COUNTER ================ //&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;button_count&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQ_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;Player.GetActivePlayers&quot;, &quot;id&quot;: 1}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+        &lt;span class=&quot;nx&quot;&gt;fetchURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                &lt;span class=&quot;nx&quot;&gt;playOrPause&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;nx&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;})();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// ================ HELPER FUNCTIONS ================ //&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;playOrPause&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;isPlayingURL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQ_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;XBMC.GetInfoBooleans&quot;, &quot;params&quot;: {&quot;booleans&quot;: [&quot;Player.Playing&quot;]}, &quot;id&quot;: 1}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;flash&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;PlayPause&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;fetchURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;isPlayingURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Player.Playing'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pauseURL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQ_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;Player.PlayPause&quot;,&quot;params&quot;:{&quot;playerid&quot;:1,&quot;play&quot;:false},&quot;id&quot;:1}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetchPause&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;nx&quot;&gt;fetchURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pauseURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;c1&quot;&gt;// Check if playback has been really paused&lt;/span&gt;
+                    &lt;span class=&quot;nx&quot;&gt;fetchURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;isPlayingURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                        &lt;span class=&quot;nx&quot;&gt;flashLong&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Is Playing: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Player.Playing'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+                        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'Player.Playing'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+                        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                            &lt;span class=&quot;c1&quot;&gt;// Still not paused, fetch pause again&lt;/span&gt;
+                            &lt;span class=&quot;nx&quot;&gt;fetchPause&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+                        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+            &lt;span class=&quot;nx&quot;&gt;fetchPause&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;resumeURL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;REQ_URL&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;method&quot;:&quot;Player.PlayPause&quot;,&quot;params&quot;:{&quot;playerid&quot;:1,&quot;play&quot;:true},&quot;id&quot;:1}'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;resumeURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fetchURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;then&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nx&quot;&gt;callback&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Don’t forget to replace the IP address of your Kodi machine in the first line. We are working here with the &lt;a href=&quot;https://kodi.wiki/view/JSON-RPC_API&quot;&gt;JSON-RPC API&lt;/a&gt; of Kodi. You can test the API by calling this URL:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;http://IP_ADDRESS_OF_KODI:PORT/jsonrpc?request={&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;Player.GetActivePlayers&quot;, &quot;id&quot;: 1}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;More examples of API calls can be found in the &lt;a href=&quot;https://kodi.wiki/view/JSON-RPC_API/Examples&quot;&gt;Kodi wiki&lt;/a&gt;. The whole possibilities of the API can be seen &lt;a href=&quot;https://kodi.wiki/view/JSON-RPC_API/v8&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;When we press the button on the Amazfit BIP two times in a row, the variable button_count gets filled with the amount of button presses. Then we fetch the URLs for the current running media and the status of it (playing or paused). After this a command to either play or pause the media will be sent. The code section with the fetchPause() function catches the moment when the pause has not been performed properly. This happens when the playback has been accelerated, then we need to press pause two times. But sadly this seems only to work in the browser. On my BIP I need to press the button 4 times to pause an accelerated playback.&lt;/p&gt;
+
+&lt;p&gt;Now create a Tasker profile with an event when the button on the Amazfit BIP is pressed. Create after this a new task for a Javascript file and link to the file with the code above. Make sure to remove the checkmark on “Auto Exit”. Return to Taskers main screen and apply the changes by pressing the checkmark at the top. You are done!&lt;/p&gt;
+
+&lt;p&gt;The possibilities with Tasker and Tools &amp;amp; Amazfit are endless. If you would like to you can change the pause and resume with another Kodi action.&lt;/p&gt;</content><author><name></name></author><summary type="html">A couple weeks ago I have purchased the Xiaomi Amazfit BIP smartwatch. It is a very cheap (50$) and simple watch with a GPS sensor, heart rate monitoring, sleep tracking, step counter and an enormous battery life of multiple weeks! The long battery life is possible through the always-on display which seems to be based on an e-ink display of ebook readers like the Amazon Kindle. In contrast to the ebook readers this display also shows a low range of colors.</summary></entry><entry><title type="html">Nginx Virtual Host for redirecting non-www to www and HTTPS</title><link href="http://localhost:4000/nginx-virtual-host-for-redirecting-non-www-to-www-and-https/" rel="alternate" type="text/html" title="Nginx Virtual Host for redirecting non-www to www and HTTPS" /><published>2018-11-09T00:00:00+01:00</published><updated>2018-11-09T00:00:00+01:00</updated><id>http://localhost:4000/nginx-virtual-host-for-redirecting-non-www-to-www-and-https</id><content type="html" xml:base="http://localhost:4000/nginx-virtual-host-for-redirecting-non-www-to-www-and-https/">&lt;p&gt;In the past I had some problems with wrong redirections of my websites with the nginx webserver. Either the non-www to www or the redirect to the HTTPS version of my site didn’t worked. I figured out the problems with the help of others and some for myself and would like to show you how your virtual hosts should look like to prevent any random redirections. We desire that all requests without HTTPS or the www prefix (&lt;em&gt;example.com&lt;/em&gt;) gets redirected to its counterpart (&lt;em&gt;https://www.example.com&lt;/em&gt;).&lt;/p&gt;
+
+&lt;p&gt;At first we need to pickup all requests which address the unencrypted HTTP port 80. The server name should be here the www as well as the non-www version of your domain. Then we will make a redirect to the desired domain with www prefix and HTTPS included.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;server &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    listen         80&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    listen    &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;::]:80&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    server_name    example.com  www.example.com&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return         &lt;/span&gt;301 https://www.example.com&lt;span class=&quot;nv&quot;&gt;$request_uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now there is the possibility to call the site over HTTPS but to omit the www prefix. Here we are listening at the HTTPS port for the non-www version and redirect it to the desired format. Note that we need to include here our certificates to be able to accept the connection. In this case I have included my &lt;a href=&quot;https://letsencrypt.org/&quot;&gt;Let’s Encrypt&lt;/a&gt; certificate.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;server &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    listen         443 ssl http2&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    server_name    example.com&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;return         &lt;/span&gt;301 https://www.example.com&lt;span class=&quot;nv&quot;&gt;$request_uri&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;For the last part there is only the main server block left for our desired URL format. This block listens for an incoming HTTPS request from a with a www prefixed URL. The user have typed the URL in the right format and triggered this block or more likely the block has been triggered by an redirection of one of our server blocks above. Include again here your certifactes and additional configurations by Let’s Encrypt. After this you can handle your main actions for your locations. I have added here some additions for restricting my Wordpress backend, for processing the PHP and a small block when my images, JS and CSS files should expire at.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;server &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    listen        443 ssl http2 default_server&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    listen   &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;::]:443 ssl http2 default_server&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    root /var/www/example.com&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    index index.php index.html index.htm&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    server_name www.example.com&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    include             /etc/letsencrypt/options-ssl-nginx.conf&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    client_max_body_size 32M&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    location / &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        try_files &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;/ /index.php?q&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;&amp;amp;&lt;span class=&quot;nv&quot;&gt;$args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    location /wp-admin &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        auth_basic &lt;span class=&quot;s2&quot;&gt;&quot;Restricted&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        auth_basic_user_file /var/www/.htpasswd&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        try_files &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;/ /index.php?q&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt;&amp;amp;&lt;span class=&quot;nv&quot;&gt;$args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    location ~ &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;php&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        try_files &lt;span class=&quot;nv&quot;&gt;$uri&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;404&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        fastcgi_split_path_info ^&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;.+&lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;php&lt;span class=&quot;o&quot;&gt;)(&lt;/span&gt;/.+&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$;&lt;/span&gt;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        fastcgi_index index.php&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        fastcgi_param SCRIPT_FILENAME &lt;span class=&quot;nv&quot;&gt;$document_root$fastcgi_script_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        include fastcgi_params&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;# cache control&lt;/span&gt;
+    location ~&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;jpg|jpeg|png|gif|ico|css|js&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        expires 7d&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name></name></author><summary type="html">In the past I had some problems with wrong redirections of my websites with the nginx webserver. Either the non-www to www or the redirect to the HTTPS version of my site didn’t worked. I figured out the problems with the help of others and some for myself and would like to show you how your virtual hosts should look like to prevent any random redirections. We desire that all requests without HTTPS or the www prefix (example.com) gets redirected to its counterpart (https://www.example.com).</summary></entry><entry><title type="html">My i3 config</title><link href="http://localhost:4000/my-i3-config/" rel="alternate" type="text/html" title="My i3 config" /><published>2018-11-06T00:00:00+01:00</published><updated>2018-11-06T00:00:00+01:00</updated><id>http://localhost:4000/my-i3-config</id><content type="html" xml:base="http://localhost:4000/my-i3-config/">&lt;p&gt;Since I’m using the &lt;a href=&quot;https://i3wm.org/&quot;&gt;i3 window manager&lt;/a&gt; I’ve been tweaking it to fit my needs till now. Sure this process will never come to end, but I want to share with you my current config. I’ve copied many useful things from other configs and added for myself some settings which might be useful for you. Feel free to copy some parts into your own config or to change some settings.&lt;/p&gt;
+
+&lt;p&gt;Here are some changes I would like to highlight:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;I’ve downloaded and moved the .ttf file of &lt;a href=&quot;https://fontawesome.com/v4.7.0/&quot;&gt;FontAwesome 4.7&lt;/a&gt; into my fonts folder in &lt;em&gt;~/.fonts&lt;/em&gt;. This allows me to use icons for my workspaces and my i3blocks status bar (not showing here because I’m not loading FontAwesome on this website).&lt;/li&gt;
+  &lt;li&gt;dmenu shows at the bottom of the screen.&lt;/li&gt;
+  &lt;li&gt;All my applications find their place on my five workspaces (browser, file manager, terminal, editors for coding and normal text editors like libreoffice, Texmaker).&lt;/li&gt;
+  &lt;li&gt;When I suspend my computer I start a script which takes a screenshot, applys a blur effect on it and shows it at lock screen.&lt;/li&gt;
+  &lt;li&gt;For my Lenovo T460 I’ve defined some key bindings which allow me to lower or raise the volume by 3% or my screen brightness by a custom step size.&lt;/li&gt;
+  &lt;li&gt;Caps lock acts like the shift key.&lt;/li&gt;
+  &lt;li&gt;My Logitech MX Master was really slow without any settings. I’ve increased the speed with xinput and set a custom coordinate matrix which helps a lot.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find more info in the comments of my config below.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt; Mod4
+
+&lt;span class=&quot;c&quot;&gt;# Font for window titles. Will also be used by the bar unless a different font&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# is used in the bar {} block below.&lt;/span&gt;
+font pango:Droid Sans 10
+
+&lt;span class=&quot;c&quot;&gt;# Use Mouse+$mod to drag floating windows to their wanted position&lt;/span&gt;
+floating_modifier &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# start a terminal&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Return &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;i3-sensible-terminal, workspace &lt;span class=&quot;nt&quot;&gt;--no-auto-back-and-forth&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# kill focused window&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+q &lt;span class=&quot;nb&quot;&gt;kill&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# start dmenu (a program launcher)&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+d &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;dmenu_run &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# change focus&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+j focus left
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+k focus down
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+l focus up
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+odiaeresis focus right
+
+&lt;span class=&quot;c&quot;&gt;# alternatively, you can use the cursor keys:&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Left focus left
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Down focus down
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Up focus up
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Right focus right
+
+&lt;span class=&quot;c&quot;&gt;# move focused window&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+j move left
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+k move down
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+l move up
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+odiaeresis move right
+
+&lt;span class=&quot;c&quot;&gt;# alternatively, you can use the cursor keys:&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+Left move left
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+Down move down
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+Up move up
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+Right move right
+
+&lt;span class=&quot;c&quot;&gt;# split in horizontal orientation&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+h split h
+
+&lt;span class=&quot;c&quot;&gt;# split in vertical orientation&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+v split v
+
+&lt;span class=&quot;c&quot;&gt;# enter fullscreen mode for the focused container&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+f fullscreen toggle
+
+&lt;span class=&quot;c&quot;&gt;# change container layout (stacked, tabbed, toggle split)&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+s layout stacking
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+w layout tabbed
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+e layout toggle split
+
+&lt;span class=&quot;c&quot;&gt;# toggle tiling / floating&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+space floating toggle
+
+&lt;span class=&quot;c&quot;&gt;# change focus between tiling / floating windows&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+space focus mode_toggle
+
+&lt;span class=&quot;c&quot;&gt;# focus the parent container&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+a focus parent
+
+&lt;span class=&quot;c&quot;&gt;# focus the child container&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#bindsym $mod+d focus child&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Make the currently focused window a scratchpad&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+minus move scratchpad
+
+&lt;span class=&quot;c&quot;&gt;# Show the first scratchpad window&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+minus scratchpad show
+
+&lt;span class=&quot;c&quot;&gt;# set own variables&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp1&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;1:  Chrome&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;2:  Dateien&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;3:  Terminal&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;4:  Code&quot;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp5&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;5:  Dokumente&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# switch to workspace&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+1 workspace &lt;span class=&quot;nv&quot;&gt;$wrksp1&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+2 workspace &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+3 workspace &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+4 workspace &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+5 workspace &lt;span class=&quot;nv&quot;&gt;$wrksp5&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+6 workspace 6
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+7 workspace 7
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+8 workspace 8
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+9 workspace 9
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+0 workspace 10
+
+&lt;span class=&quot;c&quot;&gt;# move focused container to workspace&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+1 move container to workspace &lt;span class=&quot;nv&quot;&gt;$wrksp1&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+2 move container to workspace &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+3 move container to workspace &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+4 move container to workspace &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+5 move container to workspace &lt;span class=&quot;nv&quot;&gt;$wrksp5&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+6 move container to workspace 6
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+7 move container to workspace 7
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+8 move container to workspace 8
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+9 move container to workspace 9
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+0 move container to workspace 10
+
+&lt;span class=&quot;c&quot;&gt;# assign programs to workspaces&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Chromium&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;           &lt;span class=&quot;nv&quot;&gt;$wrksp1&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Thunar&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;             &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;dolphin&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;            &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;terminal&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;           &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Omnetpp&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;            &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;OMNeT&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\+\+\s&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;IDE&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;     &lt;span class=&quot;nv&quot;&gt;$wrksp3&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;(?i)Sublime_text&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;   &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;(?i)Subl3&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;          &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;(?i)libreoffice&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;$wrksp5&lt;/span&gt;
+assign &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;TexMaker&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;           &lt;span class=&quot;nv&quot;&gt;$wrksp5&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# reload the configuration file&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+c reload
+
+&lt;span class=&quot;c&quot;&gt;# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+r restart
+
+&lt;span class=&quot;c&quot;&gt;# exit i3 (logs you out of your X session)&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+Shift+e &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# resize window (you can also use the mouse for that)&lt;/span&gt;
+mode &lt;span class=&quot;s2&quot;&gt;&quot; resize&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# These bindings trigger as soon as you enter the resize mode&lt;/span&gt;
+
+        &lt;span class=&quot;c&quot;&gt;# Pressing left will shrink the window’s width.&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# Pressing right will grow the window’s width.&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# Pressing up will shrink the window’s height.&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;# Pressing down will grow the window’s height.&lt;/span&gt;
+        bindsym j resize shrink width 10 px or 10 ppt
+        bindsym k resize grow height 10 px or 10 ppt
+        bindsym l resize shrink height 10 px or 10 ppt
+        bindsym odiaeresis resize grow width 10 px or 10 ppt
+
+        &lt;span class=&quot;c&quot;&gt;# same bindings, but for the arrow keys&lt;/span&gt;
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        &lt;span class=&quot;c&quot;&gt;# back to normal: Enter or Escape&lt;/span&gt;
+        bindsym Return mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+        bindsym Escape mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+r mode &lt;span class=&quot;s2&quot;&gt;&quot; resize&quot;&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$bg&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;            &lt;span class=&quot;c&quot;&gt;#59647D&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;   &lt;span class=&quot;c&quot;&gt;#2f343f&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;c&quot;&gt;#f3f4f5&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-text-color&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;#8E95A3&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$urgent&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;     &lt;span class=&quot;c&quot;&gt;#E53935&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# window colors&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#                       border              background         text                 indicator&lt;/span&gt;
+client.focused          &lt;span class=&quot;nv&quot;&gt;$bg&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;           &lt;span class=&quot;nv&quot;&gt;$bg&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;c&quot;&gt;#8BB7D6&lt;/span&gt;
+client.unfocused        &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-text-color&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;#8BB7D6&lt;/span&gt;
+client.focused_inactive &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-text-color&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;#8BB7D6&lt;/span&gt;
+client.urgent           &lt;span class=&quot;nv&quot;&gt;$urgent&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;$urgent&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;   &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;c&quot;&gt;#8BB7D6&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Start i3bar to display a workspace bar (plus the system information i3status&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# finds out, if available)&lt;/span&gt;
+bar &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    status_command i3blocks
+    colors &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        background &lt;span class=&quot;c&quot;&gt;#3E4557&lt;/span&gt;
+        separator &lt;span class=&quot;c&quot;&gt;#757575&lt;/span&gt;
+        &lt;span class=&quot;c&quot;&gt;#                  border             background         text&lt;/span&gt;
+        focused_workspace  &lt;span class=&quot;nv&quot;&gt;$bg&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;nv&quot;&gt;$bg&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;          &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;
+        inactive_workspace &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inactive&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-text-color&lt;/span&gt;
+        urgent_workspace   &lt;span class=&quot;nv&quot;&gt;$urgent&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;   &lt;span class=&quot;nv&quot;&gt;$urgent&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-bg-color&lt;/span&gt;   &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-color&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#########################################################&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#------------------ OWN ADDITIONS ----------------------#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#########################################################&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# border style&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#new_window pixel 4 - removes title bar&lt;/span&gt;
+hide_edge_borders both
+
+&lt;span class=&quot;c&quot;&gt;# own keybindings&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+b &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;chromium &lt;span class=&quot;nt&quot;&gt;--enable-native-gpu-memory-buffers&lt;/span&gt;, workspace &lt;span class=&quot;nt&quot;&gt;--no-auto-back-and-forth&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp1&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+c &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;dolphin, workspace &lt;span class=&quot;nt&quot;&gt;--no-auto-back-and-forth&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp2&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+z &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;subl3,    workspace &lt;span class=&quot;nt&quot;&gt;--no-auto-back-and-forth&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$wrksp4&lt;/span&gt;
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+shift+a &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;xfce4-appfinder
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+shift+s &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;xfce4-screenshooter
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+shift+y &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; ~/Skripte/Omnet_Automation.py
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+x move workspace to output right
+
+&lt;span class=&quot;c&quot;&gt;# power menu from https://wiki.archlinux.org/index.php/i3&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$Locker&lt;/span&gt; /home/denis/Skripte/lock.sh &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$mode_system&lt;/span&gt;  shutdown &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;d&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;,  reboot &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;r&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;,  lock &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;l&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;,  stand-by &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;s&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;,  &lt;span class=&quot;nb&quot;&gt;logout&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;e&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+mode &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$mode_system&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    bindsym l &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$Locker&lt;/span&gt;, mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+    bindsym e &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; i3-msg &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;, mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+    bindsym s &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$Locker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; systemctl &lt;span class=&quot;nb&quot;&gt;suspend&lt;/span&gt;, mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+    bindsym r &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; systemctl reboot, mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+    bindsym d &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; systemctl poweroff &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;, mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+
+    &lt;span class=&quot;c&quot;&gt;# back to normal: Enter or Escape&lt;/span&gt;
+    bindsym Return mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+    bindsym Escape mode &lt;span class=&quot;s2&quot;&gt;&quot;default&quot;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+bindsym &lt;span class=&quot;nv&quot;&gt;$mod&lt;/span&gt;+End mode &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$mode_system&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# return to previous workspace by pressing last workspace again&lt;/span&gt;
+workspace_auto_back_and_forth yes
+
+&lt;span class=&quot;c&quot;&gt;# remove title bar from programs&lt;/span&gt;
+for_window &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Chromium&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Chromium&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; border none
+for_window &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;(?i)Sublime_text&quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Sublime Text&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; border none
+for_window &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;title&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;^pdfpc - present&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; border none floating &lt;span class=&quot;nb&quot;&gt;enable
+&lt;/span&gt;for_window &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Galculator&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; floating &lt;span class=&quot;nb&quot;&gt;enable &lt;/span&gt;resize &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;500 400
+for_window &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Arandr&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; floating &lt;span class=&quot;nb&quot;&gt;enable&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# pulse audio controls&lt;/span&gt;
+bindsym XF86AudioLowerVolume &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;amixer &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;Master 3%-
+bindsym XF86AudioRaiseVolume &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;amixer &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;Master 3%+
+bindsym XF86AudioMute        &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;amixer &lt;span class=&quot;nt&quot;&gt;-q&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;Master toggle
+
+&lt;span class=&quot;c&quot;&gt;# screen brightness controls&lt;/span&gt;
+bindsym XF86MonBrightnessUp   &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /home/denis/Skripte/backlight_fcn_keys.sh &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt;
+bindsym XF86MonBrightnessDown &lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; /home/denis/Skripte/backlight_fcn_keys.sh &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# change caps lock to shift&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xmodmap &lt;span class=&quot;nt&quot;&gt;-e&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;keycode 66 = Shift_L NoSymbol Shift_L&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# set velocity for MX Master&lt;/span&gt;
+exec_always &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xinput &lt;span class=&quot;nt&quot;&gt;--set-prop&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;pointer:Logitech MX Master&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;libinput Accel Speed&quot;&lt;/span&gt; 1.0
+&lt;span class=&quot;c&quot;&gt;# from https://unix.stackexchange.com/a/177640/182096&lt;/span&gt;
+exec_always &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xinput &lt;span class=&quot;nt&quot;&gt;--set-prop&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;pointer:Logitech MX Master&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Coordinate Transformation Matrix&quot;&lt;/span&gt; 2 0 0 0 2 0 0 0 1.5
+
+&lt;span class=&quot;c&quot;&gt;# enable natural scrolling on touchpad&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xinput &lt;span class=&quot;nt&quot;&gt;--set-prop&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;SynPS/2 Synaptics TouchPad&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;libinput Natural Scrolling Enabled&quot;&lt;/span&gt; 1
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xinput &lt;span class=&quot;nt&quot;&gt;--set-prop&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;SynPS/2 Synaptics TouchPad&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;libinput Tapping Enabled&quot;&lt;/span&gt; 1
+exec_always &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xinput &lt;span class=&quot;nt&quot;&gt;--set-prop&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;TPPS/2 IBM TrackPoint&quot;&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;libinput Left Handed Enabled&quot;&lt;/span&gt; 1
+
+&lt;span class=&quot;c&quot;&gt;# startup programs&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; nm-applet
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; solaar
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; redshift-gtk
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; dolphin
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; start-pulseaudio-x11
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; xfce4-power-manager
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; ~/.dropbox-dist/dropboxd
+exec_always &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; compton &lt;span class=&quot;nt&quot;&gt;-CGb&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; udiskie &lt;span class=&quot;nt&quot;&gt;-as&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# remove urgent from all windows&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;exec&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sleep 3; for win in &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;wmctrl &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; | awk &lt;span class=&quot;nt&quot;&gt;-F&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;' '&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $1}'&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;; do wmctrl -i -r &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$win&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt; -b remove,demands_attention; done&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# set background image&lt;/span&gt;
+exec_always &lt;span class=&quot;nt&quot;&gt;--no-startup-id&lt;/span&gt; feh &lt;span class=&quot;nt&quot;&gt;--bg-scale&lt;/span&gt; /home/denis/Medien/Bilder/Glazer.jpg&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;</content><author><name></name></author><summary type="html">Since I’m using the i3 window manager I’ve been tweaking it to fit my needs till now. Sure this process will never come to end, but I want to share with you my current config. I’ve copied many useful things from other configs and added for myself some settings which might be useful for you. Feel free to copy some parts into your own config or to change some settings.</summary></entry><entry><title type="html">Alternative to Page Builders: Widgetize your Wordpress Page</title><link href="http://localhost:4000/alternative-to-page-builders-widgetize-your-wordpress-page/" rel="alternate" type="text/html" title="Alternative to Page Builders: Widgetize your Wordpress Page" /><published>2018-04-08T00:00:00+02:00</published><updated>2018-04-08T00:00:00+02:00</updated><id>http://localhost:4000/alternative-to-page-builders-widgetize-your-wordpress-page</id><content type="html" xml:base="http://localhost:4000/alternative-to-page-builders-widgetize-your-wordpress-page/">&lt;p&gt;You have probably heared of the visual composer or the page builder for Wordpress. These tools allows you to create a custom page layout in your backend, which doesn’t looks like the common 2/3 wide blog with a 1/3 wide sidebar. The biggest advantage that these tools have is the ability to change the layout and the content from the backend without touching any line of code.&lt;/p&gt;
+
+&lt;h3 id=&quot;problems-with-page-builders&quot;&gt;Problems with Page Builders&lt;/h3&gt;
+&lt;p&gt;One main problem that these tools bring in is that they are very slow in handling. Every little change takes seconds until you can see the result, which is a huge slow down in the development process. The other drawback is the creation of massive overhead in the resulting HTML code. The content is nested in countless of cryptical div tags as you can see in the image below:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/Nested_Divs.png&quot; alt=&quot;Nested DIVs&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;alternative-approaches&quot;&gt;Alternative Approaches&lt;/h3&gt;
+&lt;p&gt;What are the alternatives without loosing the convenience of the codeless editing? We widgetize our pages! Every component of the page is a widget and can be edited easily in the backend.&lt;/p&gt;
+
+&lt;p&gt;It must be said, that there is no completely codeless solution for this. The first layout must be written in code, but afterwards you or your client can manage the content from the widget area in the backend and will never see the code behind this.&lt;/p&gt;
+
+&lt;h3 id=&quot;register-new-widgets&quot;&gt;Register new Widgets&lt;/h3&gt;
+&lt;p&gt;Open your &lt;em&gt;functions.php&lt;/em&gt; file in your current theme under &lt;em&gt;/wp-content/theme/[&lt;strong&gt;YOUR_THEME&lt;/strong&gt;]&lt;/em&gt; and search for ‘&lt;em&gt;register_sidebar&lt;/em&gt;’. The widgets there are included in a function which has something like ‘&lt;em&gt;widget_init&lt;/em&gt;’ or ‘&lt;em&gt;register_widget&lt;/em&gt;’ in the name. Here is an example how it could look like:&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hotel_hamburg_widgets_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;register_sidebar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'name'&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Sidebar'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'id'&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'sidebar-1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'description'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Add widgets here.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_widget'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;section id=&quot;%1$s&quot; class=&quot;widget %2$s&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_widget'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/section&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_title'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;h2 class=&quot;widget-title&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_title'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/h2&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;...&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Copy the function &lt;em&gt;register_sidebar&lt;/em&gt; including the last ‘&lt;em&gt;);&lt;/em&gt;’ and paste it right before the closing curly bracket for the function. Change the name and the id of the widget and save the file:&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;hotel_hamburg_widgets_init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;register_sidebar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'name'&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Sidebar'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'id'&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'sidebar-1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'description'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Add widgets here.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_widget'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;section id=&quot;%1$s&quot; class=&quot;widget %2$s&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_widget'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/section&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_title'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;h2 class=&quot;widget-title&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_title'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/h2&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;register_sidebar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'name'&lt;/span&gt;          &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'MY_NEW_WIDGET'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'id'&lt;/span&gt;            &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'mynewwidget-1'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'description'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;esc_html__&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'This is a new widget.'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'hotel-hamburg'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_widget'&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;section id=&quot;%1$s&quot; class=&quot;widget %2$s&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_widget'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/section&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'before_title'&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;h2 class=&quot;widget-title&quot;&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s1&quot;&gt;'after_title'&lt;/span&gt;   &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'&amp;lt;/h2&amp;gt;'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The widget now appears in your backend and you can assign any content to the widget, but it still is not shown up in the frontend. Let’s change this.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/New_Widget.png&quot; alt=&quot;New Widget&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;add-the-widget-to-your-template&quot;&gt;Add the Widget to your Template&lt;/h3&gt;
+&lt;p&gt;We need now a custom template for our widgetized page. &lt;a href=&quot;https://developer.wordpress.org/themes/template-files-section/page-template-files/&quot; target=&quot;_blank&quot;&gt;Create a page template&lt;/a&gt; as described in the link. Don’t forget to set the page template in your page if you have set up a multiple purpose template!&lt;/p&gt;
+
+&lt;p&gt;Decide where you want to show up your widget in the page template and copy this code into it:&lt;/p&gt;
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;is_active_sidebar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'mynewwidget-1'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dynamic_sidebar&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'mynewwidget-1'&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;endif&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Save your file and look at your new widgetized page. Change if necessary the &lt;em&gt;before_widget&lt;/em&gt;, &lt;em&gt;after_widget&lt;/em&gt;, &lt;em&gt;before_title&lt;/em&gt;, &lt;em&gt;after_title&lt;/em&gt; attributes for your needs and add some styles.&lt;/p&gt;</content><author><name></name></author><summary type="html">You have probably heared of the visual composer or the page builder for Wordpress. These tools allows you to create a custom page layout in your backend, which doesn’t looks like the common 2/3 wide blog with a 1/3 wide sidebar. The biggest advantage that these tools have is the ability to change the layout and the content from the backend without touching any line of code.</summary></entry><entry><title type="html">Die Besonderheit der Implementierung von QUIC im User Space</title><link href="http://localhost:4000/die-besonderheit-der-implementierung-von-quic-im-user-space/" rel="alternate" type="text/html" title="Die Besonderheit der Implementierung von QUIC im User Space" /><published>2018-03-03T00:00:00+01:00</published><updated>2018-03-03T00:00:00+01:00</updated><id>http://localhost:4000/die-besonderheit-der-implementierung-von-quic-im-user-space</id><content type="html" xml:base="http://localhost:4000/die-besonderheit-der-implementierung-von-quic-im-user-space/">&lt;p&gt;Alle gängigen Netzwerkprotokolle ab der vierten Schicht des TCP/IP-Modells finden ihre Implementierung im Kernel des Betriebssystems (Kernel Space). Dieses Vorgehen wird gewählt, um bei der Menge an Netzwerkpaketen eine schnelle und effiziente Verarbeitung zu gewährleisten. Auf der anderen Seite gibt es den User Space dem die Protokolle aus der Applikations-Schicht zugeordnet sind. Dieser Beitrag soll die Unterschiede beider Bereiche herausstellen und am Beispiel von QUIC die Vorteile einer Implementierung im User Space beleuchten.&lt;/p&gt;
+
+&lt;h3 id=&quot;der-kernel&quot;&gt;Der Kernel&lt;/h3&gt;
+&lt;p&gt;Bei dem Kernel handelt es sich um die Komponente eines Betriebssystems, die den grundlegenden Zugriff auf die Hardware ermöglicht. Zu den Aufgaben des Kernels zählen die Verwaltung des Speichers, die Auswahl einer Ausführungsreihenfolge von Prozessen auf dem Prozessor (Scheduling), das Handling von Interrupts, die Bereitstellung einer Interprozesskommunikation, sowie die Verwaltung weiterer Services wie z.B. die Netzwerkkommunikation. Es gibt sicherlich viele weitere Bereiche in denen der Kernel tätig ist, jedoch soll es erstmal bei diesen Ausblick bleiben.&lt;/p&gt;
+
+&lt;p&gt;Dieser vollständige Zugriff auf die Hardware des Computers birgt die Gefahr, dass bei falscher Verwendung, z.B. das ständige Beschreiben des gleichen Speicherblocks auf einer SSD, es zu irrevesiblen Schäden kommen kann. Die Auslieferung des Kernels durch die Entwickler des Betriebssystems stellt sicher, dass wirklich nur privilegierte Anwendungen direkt auf die Hardware zugreifen können.&lt;/p&gt;
+
+&lt;h3 id=&quot;kernel-und-user-space&quot;&gt;Kernel und User Space&lt;/h3&gt;
+&lt;p&gt;Die Trennung des privilegierten Systemzustands inklusive eines geschützten Speicherbereiches vom Rest des Systems, erlaubt auch weniger vertrauenswürdigen Anwendungen eine Ausführung auf dem Computersystem. Ersteres wird als Kernel Space bezeichnet, während die Umgebung der Anwendungen den User Space darstellt. Ohne Zugriff auf den Kernel, um beispielsweise Dateien zu erstellen oder zu editieren, sind jedoch die User-Space-Anwendungen nutzlos. System Calls stellen daher einen Mechanismus dar, die es den Anwendungen aus dem User Space ermöglichen, über vordefinierte Funktionen auf den Kernel zuzugreifen. Die nachstehende Abbildung veranschaulicht den Ablauf eines System Calls:
+&lt;img src=&quot;/images/SysCallDiagramm.svg&quot; alt=&quot;System Call Ablauf&quot; style=&quot;width:150px;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Angenommen ein Programm möchte eine Datei lesen. Dazu führt das Programm den System Call &lt;em&gt;read()&lt;/em&gt; aus. Es folgt ein Kontextwechsel vom User Space in den Kernel Space, der dem Programm ab diesen Zeitpunkt die Kontrolle entzieht. Die erforderlichen Daten werden vom Speicher gelesen und nach einem Wechsel zurück in den User Space dem Programm zur Verfügung gestellt. Ein simpler, aber effektiver Mechanismus.&lt;/p&gt;
+
+&lt;p&gt;Das Problem an dieser Sache ist, dass die Kontextwechsel immer mit zusätzlichen CPU-Zyklen und damit einem Performanceverlust behaftet sind. Bei vielen Zugriffen auf die Kernel-Funktionen, wie es beim Netzwerk mit dem Senden und Empfangen von Paketen der Fall ist, kommt ein gewisser Overhead zustande. Nicht zuletzt deshalb wurde für den Linux Kernel im Jahr 2015 vorgeschlagen den Teil der symmetrischen Ver- und Entschlüsselung des Verschlüsselungsprotokoll TLS in den Kernel Space zu verschieben (siehe &lt;a href=&quot;https://lwn.net/Articles/665602/&quot; target=&quot;_blank&quot;&gt;LWN&lt;/a&gt;). Im Linux Kernel 4.13 ist dieses Kernel TLS (KTLS) dann auch eingeflossen (siehe &lt;a href=&quot;https://www.heise.de/ct/artikel/Die-Neuerungen-von-Linux-4-13-3771362.html&quot; target=&quot;_blank&quot;&gt;Heise&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h3 id=&quot;quic-user-space-motivation&quot;&gt;QUIC User Space Motivation&lt;/h3&gt;
+&lt;p&gt;Was sind die Gründe dafür ein Transportprotokoll wie QUIC im User Space zu implementieren, wo doch selbst im TCP/IP-Modell höher angesiedelte Protokolle bereits zum Teil im Kernel implementiert werden (siehe KTLS darüber)? Es folgt eine Auflistung der Vorteile aus inklusive eigener Ergänzungen:&lt;/p&gt;
+
+&lt;h4 id=&quot;einsatz-moderner-softwareentwicklungsmethodiken&quot;&gt;Einsatz moderner Softwareentwicklungsmethodiken&lt;/h4&gt;
+&lt;p&gt;Durch Unit- und Ende-zu-Ende-Tests wird es den Entwicklern ermöglicht schnell und ohne viel Aufwand Fehler im Code auszumachen, die unter den beschränkten Möglichkeiten des Kernel Spaces womöglich zu spät entdeckt worden wären. Dies resultiert letztendlich in einer höheren Robustheit der Software.&lt;/p&gt;
+&lt;h4 id=&quot;erweitertes-logging&quot;&gt;Erweitertes Logging&lt;/h4&gt;
+&lt;p&gt;Ein Nachteil am Kernel Space ist, dass Applikationen unter einer strengeren Speicherbeschränkung stehen, als im User Space. Für QUIC konnten die Entwickler deshalb auf ein erweitertes Logging in Verbindung mit einer Server-Logging-Infrastruktur zurückgreifen. Das erweiterte Logging hat bereits dazu geführt, dass ein Jahrzehnt alter Bug in der Congestion Control Cubic aufgedeckt werden konnte, wodurch die Performance von QUIC deutlich erhöht wurde.&lt;/p&gt;
+&lt;h4 id=&quot;unabhängigkeit-vom-betriebssystem&quot;&gt;Unabhängigkeit vom Betriebssystem&lt;/h4&gt;
+&lt;p&gt;Dieser Punkt gilt als der wahrscheinlich wichtigste Vorteil - die Unabhängigkeit vom Betriebssystem (weiter mit OS abgekürzt). Neue OS-Versionen werden meist in einem mehrjährigen Zyklus veröffentlicht und unterstehen der vollständigen Kontrolle der Entwickler des OS. Dies erschwert das Einspielen neuer Applikationsversionen und erfordert bei einem neuen Protokoll, wie QUIC, die Motivation und Bereitschaft bei den Beteiligten des OS überhaupt ein neues Protokoll zu integrieren.&lt;/p&gt;
+
+&lt;p&gt;Mit der Kopplung am OS werden auch die Nachteile einer langsamen und geringen Ausbreitung neuer Versionen mitgenommen. Das Einspielen neuer Updates für wichtige Sicherheitslücken oder neue Funktionen ist auf den Update- oder Realease-Zyklus des OS beschränkt. Auch kann niemand garantieren, dass das Update sofort bei einer breiten Masse an Computern ankommt, womit man dem Problem der Fragmentierung gegenübersteht.&lt;/p&gt;
+
+&lt;p&gt;Durch die Integrierung von QUIC im open source Webbrowser-Projekt Chromium, welcher auch vom weit genutzten Chrome verwendet wird, können die Entwickler auf einen vollkommen unabhängigen und iterativen Entwicklungsprozess für QUIC setzen. Die Bereitstellung von Chrome und Chromium über die gängigsten OS hinweg erreicht bei einem Update von QUIC wesentlich mehr Nutzer, als es bei einem einzigen OS der Fall wäre. Besonders bei Sicherheitslücken ist das eine Eigenschaft von großem Vorteil.&lt;/p&gt;
+
+&lt;h3 id=&quot;negative-auswirkungen-der-user-space-implementierung&quot;&gt;Negative Auswirkungen der User-Space-Implementierung&lt;/h3&gt;
+&lt;p&gt;Auch wenn bei der Entwicklung von QUIC der Fokus auf eine schnelle Entwicklung gelegt wurde, darf der Aspekt des Overheads durch die Kontextwechsel zwischen User und Kernel Space nicht ignoriert werden. In Messungen aus wurde im Vergleich zu einem Protokollstack bestehend aus TLS und TCP eine 3,5 mal höhere CPU-Auslastung beobachtet. Nach der Durchführung von Optimierungen konnte die Auslastung auf das 2-fache gesenkt werden.&lt;/p&gt;
+
+&lt;p&gt;Als mögliche Lösung des Problems wurde in die Nutzung des Frameworks netmap aufgeführt. Dieses Framework ermöglicht User-Space-Applikationen einen schnellen Zugriff auf Netzwerkpakete in dem es den Overhead der durch Speicherallokation, System Calls und der Kopie von Speicherinhalten entsteht, reduziert oder gar beseitigt. In Messungen des Netmap-Papers konnte der Transport eines Netzwerkpakets vom Kabel bis zur User-Space-Anwendung um mindestens eine Größenordnung beschleunigt werden.&lt;/p&gt;
+
+&lt;h3 id=&quot;fazit&quot;&gt;Fazit&lt;/h3&gt;
+&lt;p&gt;Die Implementierung von Anwendungen hat sowohl im Kernel als auch im User Space ihre Vor- und Nachteile. Der Kernel Space bietet die bessere Performance, schränkt jedoch dafür die Entwicklungsmöglichkeiten ein und ist vom OS abhängig, während es beim User Space anders herum ist. Der Schritt QUIC im User Space zu implementieren stellt sich vor dem Hintergrund einer schnellen Entwicklung, als ein gewagter aber sinnvoller Weg dar. Mit dem Netmap-Framework wurde außerdem eine Lösung vorgestellt, die die Performancenachteile durch den Kontextwechsel drastisch reduzieren kann. Es bleibt abzuwarten, ob eine Umsetzung des Netmap-Frameworks in Zukunft geplant ist. Falls doch, so würde dem weltweiten Einsatz von QUIC kaum noch etwas entgegenstehen.&lt;/p&gt;</content><author><name></name></author><summary type="html">Alle gängigen Netzwerkprotokolle ab der vierten Schicht des TCP/IP-Modells finden ihre Implementierung im Kernel des Betriebssystems (Kernel Space). Dieses Vorgehen wird gewählt, um bei der Menge an Netzwerkpaketen eine schnelle und effiziente Verarbeitung zu gewährleisten. Auf der anderen Seite gibt es den User Space dem die Protokolle aus der Applikations-Schicht zugeordnet sind. Dieser Beitrag soll die Unterschiede beider Bereiche herausstellen und am Beispiel von QUIC die Vorteile einer Implementierung im User Space beleuchten.</summary></entry><entry><title type="html">Quick UDP Internet Connections: Eine Einführung</title><link href="http://localhost:4000/quick-udp-internet-connections-eine-einfuehrung/" rel="alternate" type="text/html" title="Quick UDP Internet Connections: Eine Einführung" /><published>2018-02-18T00:00:00+01:00</published><updated>2018-02-18T00:00:00+01:00</updated><id>http://localhost:4000/quick-udp-internet-connections-eine-einfuehrung</id><content type="html" xml:base="http://localhost:4000/quick-udp-internet-connections-eine-einfuehrung/">&lt;p&gt;Das Transmission Control Protocol (TCP) ist selbst nach 36 Jahren seit der Standardisierung durch die IETF noch das am weitesten verbreitete Transportprotokoll für eine zuverlässige und reihenfolgegesicherte Übertragung. Es ist beachtlich, dass solch ein altes Protokoll so lange den stetig steigenden Anforderungen an das Internet standhalten konnte. Jedoch bringt TCP Probleme und Altlasten mit sich, die einer weiteren Entwicklung des Internets im Weg steht.&lt;/p&gt;
+
+&lt;p&gt;Im Jahr 2013 wurde von Jim Roskind (zu diesem Zeitpunkt noch bei Google angestellt) ein neues Transportprotokoll namens QUIC (Quick UDP Internet Connections) vorgestellt, das in vielen Bereichen einen ganz anderen Weg als die bisher bekannten Protokolle der Transportschicht einschlägt. Hier folgt eine kurze und unvollständige Auflistung der Hauptpunkte:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Implementierung im User Space&lt;/li&gt;
+  &lt;li&gt;Multiplexing&lt;/li&gt;
+  &lt;li&gt;Verschlüsselung&lt;/li&gt;
+  &lt;li&gt;Reduzierte Handshake-Laufzeiten&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;standardisierung&quot;&gt;Standardisierung&lt;/h3&gt;
+&lt;p&gt;Seit 2016 bemüht sich eine Working Group innerhalb der IETF (&lt;a href=&quot;https://datatracker.ietf.org/wg/quic/about/&quot; target=&quot;_blank&quot;&gt;QUIC WG&lt;/a&gt;), QUIC zu einem festen Internetstandard zu entwickeln. Von der ursprünglichen Implementierung von Google hat sich die QUIC WG etwas distanziert. Die Unterschiede werden in einem späteren Artikel näher beleuchtet.&lt;br /&gt;
+Bis heute wurden von der QUIC WG Drafts zu QUIC selbst als auch der TLS-Verschlüsselung in Verbindung mit QUIC, der Congestion Control und noch weiteren Themen veröffentlicht. Im Dezember 2018 ist geplant, die Kern-Dokumente bei der IESG zur Standardisierung einzureichen, sodass wahrscheinlich im Jahr 2019 mit einer finalen Standardisierung von QUIC gerechnet werden kann.&lt;/p&gt;
+
+&lt;h3 id=&quot;ausblick-auf-artikelserie&quot;&gt;Ausblick auf Artikelserie&lt;/h3&gt;
+&lt;p&gt;Im Rahmen meines Masterprojekts beschäftige ich mich stark mit QUIC. In einer Artikelserie werde ich auf die Neuheiten und Funktionen von QUIC im Detail eingehen und hoffe, den Einen oder Anderen auch für das Protokoll begeistern zu können. Folgende Themen sind für die Serie zu Beginn angedacht:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Die Besonderheit der Implementierung im User Space&lt;/li&gt;
+  &lt;li&gt;QUIC 1-RTT-Handshake: Der Verbindungsaufbau&lt;/li&gt;
+  &lt;li&gt;QUIC 1-RTT-Handshake: Der Verbindungsabbau&lt;/li&gt;
+  &lt;li&gt;Die Unterschiede zwischen IETF QUIC und Google QUIC&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Es werden noch viele weitere Artikel erscheinen. Gerne könnt ihr mir über die Kontakt-Seite noch Wünsche zukommen lassen.&lt;/p&gt;</content><author><name></name></author><summary type="html">Das Transmission Control Protocol (TCP) ist selbst nach 36 Jahren seit der Standardisierung durch die IETF noch das am weitesten verbreitete Transportprotokoll für eine zuverlässige und reihenfolgegesicherte Übertragung. Es ist beachtlich, dass solch ein altes Protokoll so lange den stetig steigenden Anforderungen an das Internet standhalten konnte. Jedoch bringt TCP Probleme und Altlasten mit sich, die einer weiteren Entwicklung des Internets im Weg steht.</summary></entry><entry><title type="html">Install OMNeT++ on arch based systems</title><link href="http://localhost:4000/install-omnet+on-arch-based-systems/" rel="alternate" type="text/html" title="Install OMNeT++ on arch based systems" /><published>2018-02-16T00:00:00+01:00</published><updated>2018-02-16T00:00:00+01:00</updated><id>http://localhost:4000/install-omnet+on-arch-based-systems</id><content type="html" xml:base="http://localhost:4000/install-omnet+on-arch-based-systems/">&lt;p&gt;This guide shows the installation of &lt;strong&gt;OMNeT++ 5.2&lt;/strong&gt; from the source files. The process should be similar to other versions of OMNeT++. Maybe you already know about the packages of &lt;a href=&quot;https://aur.archlinux.org/packages/?O=0&amp;amp;K=omnet&quot; target=&quot;_blank&quot;&gt;OMNeT++ in the AUR&lt;/a&gt;. At this moment (16.02.2018) these packages were either outdated or provided a in the future coming build which is still in development. If there is a stable version in the AUR it can be preferred over the manual installation. Let’s start the installation:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Download and unzip the source files (&lt;a href=&quot;https://omnetpp.org/omnetpp&quot; target=&quot;_blank&quot;&gt;https://omnetpp.org/omnetpp&lt;/a&gt;) in your home directory.&lt;/li&gt;
+  &lt;li&gt;Add the following environment variables .bashrc or whatever rc file you are using.&lt;br /&gt;
+&lt;em&gt;Attention&lt;/em&gt;: Change the version to your own.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;/omnetpp-5.2/bin:&lt;span class=&quot;nv&quot;&gt;$PATH&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;LD_LIBRARY_PATH&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$LD_LIBRARY_PATH&lt;/span&gt;:&lt;span class=&quot;nv&quot;&gt;$HOME&lt;/span&gt;/omnetpp-5.2/lib:&lt;span class=&quot;nv&quot;&gt;$LD_LIBRARY_PATH&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Make sure you have installed the following dependencies in their newest version:
+    &lt;ul&gt;
+      &lt;li&gt;base-devel, gcc, g++, bison (2.4+), flex, perl&lt;/li&gt;
+      &lt;li&gt;Recommended packages: Tcl/Tk, LibXML2, OpenJDK, Qt, OpenSceneGraph, osgEarth, GraphViz, Doxygen, MPI, Akaroa, Pcap&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If there is a problem with a recommended package you can try to set the option in your &lt;code class=&quot;highlighter-rouge&quot;&gt;configure.user&lt;/code&gt; file in your OMNeT++ directory to &lt;em&gt;no&lt;/em&gt; and move on.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;./configure&lt;/code&gt; in your omnet directory&lt;/li&gt;
+  &lt;li&gt;Run &lt;code class=&quot;highlighter-rouge&quot;&gt;make -j[YOUR NUMBER CPU CORES]&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;After compiling you can start omnet with &lt;em&gt;omnetpp&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><summary type="html">This guide shows the installation of OMNeT++ 5.2 from the source files. The process should be similar to other versions of OMNeT++. Maybe you already know about the packages of OMNeT++ in the AUR. At this moment (16.02.2018) these packages were either outdated or provided a in the future coming build which is still in development. If there is a stable version in the AUR it can be preferred over the manual installation. Let’s start the installation: Download and unzip the source files (https://omnetpp.org/omnetpp) in your home directory. Add the following environment variables .bashrc or whatever rc file you are using. Attention: Change the version to your own. export PATH=$HOME/omnetpp-5.2/bin:$PATH export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/omnetpp-5.2/lib:$LD_LIBRARY_PATH Make sure you have installed the following dependencies in their newest version: base-devel, gcc, g++, bison (2.4+), flex, perl Recommended packages: Tcl/Tk, LibXML2, OpenJDK, Qt, OpenSceneGraph, osgEarth, GraphViz, Doxygen, MPI, Akaroa, Pcap</summary></entry></feed>
